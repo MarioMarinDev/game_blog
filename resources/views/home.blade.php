@@ -1,23 +1,14 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+@section('container')
+<h1 class="mb-5 text-center">¡Bienvenido a mi página web {{ env("APP_NAME") }}!</h1>
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    {{ __('You are logged in!') }}
-                </div>
-            </div>
-        </div>
+<div class="row">
+  @foreach ($games as $game)
+    <div class="col-lg-3 col-md-6 col-12 text-center">
+      <div class="game-box" style="background-image: url('{{ $game->image }}');"></div>
     </div>
+  @endforeach
 </div>
+
 @endsection
