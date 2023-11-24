@@ -37,6 +37,9 @@
           </a>
 
           <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            @if(Auth::user()->is_admin)
+              <a href="{{ route('admin.games.index') }}" class="dropdown-item">Panel de administración</a>
+            @endif
             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">
               {{ __('Logout') }}

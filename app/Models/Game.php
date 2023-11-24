@@ -14,7 +14,18 @@ class Game extends Model {
    *
    * @var array
    */
-  protected $fillable = ['name', 'image', 'user_id'];
+  protected $fillable = ['name', 'image', 'user_id', 'description'];
+
+  /* =================================================================
+    [ VALIDATION ]
+  ================================================================= */
+  public static function validationRules(): array {
+    return [
+      "name" => "required|string|min:1|max:255",
+      "description" => "string|min:5|max:500",
+      "image" => "required|string|min:10|max:255"
+    ];
+  }
 
   /* =================================================================
     [ RELATIONSHIPS ]
