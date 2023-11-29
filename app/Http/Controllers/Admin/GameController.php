@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Game;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class GameController extends Controller {
@@ -30,16 +31,23 @@ class GameController extends Controller {
 
   public function store(Request $request) {
     $params = $request->all();
-    $rules = Game::validationRules();
+    $rules = Game::validationRules("store");
     Validator::make($params, $rules)->validate();
     // Create a new game
     $new_game = new Game([
       "name" => $params["name"],
       "description" => $params["description"],
-      "image" => $params["image"]
+      "image" => ""
     ]);
     // Assign game's creator
     $new_game->user()->associate(Auth::user());
+    $new_game->save();
+    // Store the game boxart
+    $extension = $params["image"]->getClientOriginalExtension();
+    $location = "games/" . $new_game->id;
+    $file_name = "boxart." . $extension;
+    Storage::putFileAs($location, $params["image"], $file_name);
+    $new_game->image = $location . "/" . $file_name;
     $new_game->save();
     // Return the user to the games list
     return redirect()->route("admin.games.index");
@@ -54,13 +62,24 @@ class GameController extends Controller {
 
   public function update(int $game_id, Request $request) {
     $params = $request->all();
-    $rules = Game::validationRules();
+    $rules = Game::validationRules("update");
     Validator::make($params, $rules)->validate();
     // Update game's data
     $game = Game::find($game_id);
     $game->name = $params["name"];
     $game->description =  $params["description"];
-    $game->image = $params["image"];
+    if($params["image"]) {
+      // Check if file already exists
+      if(Storage::exists($game->image)) {
+        Storage::delete($game->image);
+      }
+      // Store the new game boxart
+      $extension = $params["image"]->getClientOriginalExtension();
+      $location = "games/" . $game->id;
+      $file_name = "boxart." . $extension;
+      Storage::putFileAs($location, $params["image"], $file_name);
+      $game->image = $location . "/" . $file_name;
+    }
     $game->save();
 
     return redirect()->route('admin.games.show', [$game_id]);

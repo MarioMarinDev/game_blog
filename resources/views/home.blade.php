@@ -6,7 +6,7 @@
 <div class="row">
   @foreach ($games as $game)
     <div class="col-lg-3 col-md-6 col-12 text-center">
-      <div class="game-box" style="background-image: url('{{ $game->image }}');"></div>
+      <div class="game-box" style="background-image: url('{{ $game->getImageUrl() }}');"></div>
     </div>
   @endforeach
 </div>

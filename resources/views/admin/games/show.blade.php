@@ -3,7 +3,7 @@
 @section("container")
   <h1>{{ $game->name }}</h1>
   <div>
-    <img src="{{ $game->image }}" alt="Box Art" width="200" height="300">
+    <img src="{{ $game->getImageUrl() }}" alt="Box Art" width="200" height="300">
   </div>
   <p>{{ $game->description }}</p>
   <hr>

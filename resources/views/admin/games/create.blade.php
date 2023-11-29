@@ -3,7 +3,7 @@
 @section("container")
   <h1>Crear nuevo juego</h1>
   <hr>
-  <form action="{{ route('admin.games.store') }}" method="POST">
+  <form action="{{ route('admin.games.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
       <label for="name">Nombre:</label>
@@ -20,8 +20,8 @@
       @enderror
     </div>
     <div class="form-group mt-3">
-      <label for="image">URL de la imagen</label>
-      <input type="text" name="image" id="image" class="form-control" required>
+      <label for="image">Imagen</label>
+      <input type="file" name="image" id="image" class="form-control" required>
       @error('image')
         <span class="text-danger">{{ $message }}</span>
       @enderror
